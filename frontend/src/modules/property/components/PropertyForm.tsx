@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Step1BasicInfo from './Step1BasicInfo'
-import { createProperty } from '@/services/api'
+//import { createProperty } from '@/services/api'
 
 type PropertyFormData = {
     title: string
@@ -21,17 +21,17 @@ export default function PropertyForm() {
         setFormData(prev => ({ ...prev, ...fields }))
     }
 
-    const handleFinalSubmit = async () => {
-        try {
-            const response = await createProperty(formData)
-            console.log('Property created:', response)
-            alert('Property created successfully!')
-            // Optionally reset or redirect here
-        } catch (err) {
-            console.error(err)
-            alert('Something went wrong while saving the property.')
-        }
-    }
+    // const handleFinalSubmit = async () => {
+    //     try {
+    //         const response = await createProperty(formData)
+    //         console.log('Property created:', response)
+    //         alert('Property created successfully!')
+    //         // Optionally reset or redirect here
+    //     } catch (err) {
+    //         console.error(err)
+    //         alert('Something went wrong while saving the property.')
+    //     }
+    // }
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -40,7 +40,6 @@ export default function PropertyForm() {
                 <Step1BasicInfo
                     data={formData}
                     updateFields={updateFields}
-                    onNext={handleFinalSubmit}
                 />
             </div>
         </div>

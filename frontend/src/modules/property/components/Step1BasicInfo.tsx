@@ -1,8 +1,7 @@
-// src/modules/property/components/Step1BasicInfo.tsx
-
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { createProperty } from '@/services/api'
 
 type Props = {
     data: {
@@ -11,10 +10,10 @@ type Props = {
         type: string
     }
     updateFields: (fields: Partial<Props['data']>) => void
-    onNext: () => void
+    onSuccess?: () => void
 }
 
-export default function Step1BasicInfo({ data, updateFields, onNext }: Props) {
+export default function Step1BasicInfo({ data, updateFields, onSuccess }: Props) {
     const {
         register,
         handleSubmit,
@@ -24,9 +23,18 @@ export default function Step1BasicInfo({ data, updateFields, onNext }: Props) {
     })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onSubmit = (values: any) => {
+    const onSubmit = async (values: any) => {
         updateFields(values)
-        onNext()
+
+        try {
+            const res = await createProperty(values)
+            console.log("Property created:", res)
+            alert("Property created successfully!")
+            onSuccess?.()
+        } catch (err) {
+            console.error(err)
+            alert("Something went wrong while saving.")
+        }
     }
 
     return (
@@ -35,44 +43,37 @@ export default function Step1BasicInfo({ data, updateFields, onNext }: Props) {
                 <label className="block font-medium text-gray-700 mb-1">Property Name</label>
                 <input
                     {...register('title', { required: true })}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. Ocean View Apartment"
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
                 />
-                {errors.title && <span className="text-red-500 text-sm">This field is required</span>}
+                {errors.title && <span className="text-red-500 text-sm">Required</span>}
             </div>
 
             <div>
                 <label className="block font-medium text-gray-700 mb-1">Location</label>
                 <input
                     {...register('location', { required: true })}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g. Sydney, NSW"
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
                 />
-                {errors.location && <span className="text-red-500 text-sm">This field is required</span>}
+                {errors.location && <span className="text-red-500 text-sm">Required</span>}
             </div>
 
             <div>
-                <label className="block font-medium text-gray-700 mb-1">Property Type</label>
+                <label className="block font-medium text-gray-700 mb-1">Type</label>
                 <select
                     {...register('type', { required: true })}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
                 >
                     <option value="">Select</option>
                     <option value="Apartment">Apartment</option>
                     <option value="House">House</option>
                     <option value="Townhouse">Townhouse</option>
                 </select>
-                {errors.type && <span className="text-red-500 text-sm">This field is required</span>}
+                {errors.type && <span className="text-red-500 text-sm">Required</span>}
             </div>
 
-            <div className="flex justify-end">
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
-                >
-                    Next
-                </button>
-            </div>
+            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md">
+                Submit
+            </button>
         </form>
     )
 }
