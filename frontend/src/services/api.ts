@@ -15,3 +15,5 @@ export async function createProperty(propertyData: any) {
     return res.json()
   }
   
+
+  
