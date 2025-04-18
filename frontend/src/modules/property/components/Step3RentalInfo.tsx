@@ -5,13 +5,14 @@ import { TrendingDown, Wallet } from 'lucide-react'
 
 type Props = {
     data: {
-        rent: number
-        vacancy_rate: number
+        rent: number | undefined
+        vacancy_rate: number | undefined
     }
     updateFields: (fields: Partial<Props['data']>) => void
     onNext: () => void
     onBack: () => void
 }
+
 
 export default function Step3RentalInfo({ data, updateFields, onNext, onBack }: Props) {
     const {

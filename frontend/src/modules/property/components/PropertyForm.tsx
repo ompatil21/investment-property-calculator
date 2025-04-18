@@ -5,27 +5,35 @@ import Step1BasicInfo from './Step1BasicInfo'
 import Step2PurchaseDetails from './Step2PurchaseDetails'
 import Step3RentalInfo from './Step3RentalInfo'
 import Step4Expenses from './Step4Expenses'
+import Step5OwnershipIncome from './Step5OwnershipIncome'
 import ConfirmationScreen from './ConfirmationScreen'
 import { createProperty } from '@/services/api'
 
+type Owner = {
+    name: string
+    ownership: number | undefined
+    income: number | undefined
+}
 
 type PropertyFormData = {
     title: string
     location: string
     type: string
-    purchase_price: number
-    deposit: number
-    loan_amount: number
-    interest_rate: number
-    loan_term: number
-    rent: number
-    vacancy_rate: number
-    council_rates: number
-    insurance: number
-    maintenance: number
-    property_manager: number
-
+    purchase_price: number | undefined
+    deposit: number | undefined
+    loan_amount: number | undefined
+    interest_rate: number | undefined
+    loan_term: number | undefined
+    rent: number | undefined
+    vacancy_rate: number | undefined
+    council_rates: number | undefined
+    insurance: number | undefined
+    maintenance: number | undefined
+    property_manager: number | undefined
+    owners: Owner[]
+    wage_growth: number | undefined
 }
+
 export default function PropertyForm() {
     const [step, setStep] = useState(1)
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -34,17 +42,19 @@ export default function PropertyForm() {
         title: '',
         location: '',
         type: '',
-        purchase_price: 0,
-        deposit: 0,
-        loan_amount: 0,
-        interest_rate: 0,
-        loan_term: 0,
-        rent: 0,
-        vacancy_rate: 0,
-        council_rates: 0,
-        insurance: 0,
-        maintenance: 0,
-        property_manager: 0,
+        purchase_price: undefined,
+        deposit: undefined,
+        loan_amount: undefined,
+        interest_rate: undefined,
+        loan_term: undefined,
+        rent: undefined,
+        vacancy_rate: undefined,
+        council_rates: undefined,
+        insurance: undefined,
+        maintenance: undefined,
+        property_manager: undefined,
+        owners: [{ name: '', ownership: undefined, income: undefined }],
+        wage_growth: undefined
     })
 
     const updateFields = (fields: Partial<PropertyFormData>) => {
@@ -62,17 +72,19 @@ export default function PropertyForm() {
                                 title: '',
                                 location: '',
                                 type: '',
-                                purchase_price: 0,
-                                deposit: 0,
-                                loan_amount: 0,
-                                interest_rate: 0,
-                                loan_term: 0,
-                                rent: 0,
-                                vacancy_rate: 0,
-                                council_rates: 0,
-                                insurance: 0,
-                                maintenance: 0,
-                                property_manager: 0,
+                                purchase_price: undefined,
+                                deposit: undefined,
+                                loan_amount: undefined,
+                                interest_rate: undefined,
+                                loan_term: undefined,
+                                rent: undefined,
+                                vacancy_rate: undefined,
+                                council_rates: undefined,
+                                insurance: undefined,
+                                maintenance: undefined,
+                                property_manager: undefined,
+                                owners: [{ name: '', ownership: undefined, income: undefined }],
+                                wage_growth: undefined
                             })
                             setStep(1)
                             setIsSubmitted(false)
@@ -87,45 +99,28 @@ export default function PropertyForm() {
         <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
 
-                {/* Left: Sidebar */}
+                {/* Left Sidebar */}
                 <div className="w-full md:w-1/3 bg-blue-700 text-white p-6 relative">
-                    <h3 className="uppercase text-sm font-bold mb-8 tracking-widest">Step {step} of 4</h3>
+                    <h3 className="uppercase text-sm font-bold mb-8 tracking-widest">Step {step} of 5</h3>
                     <ul className="space-y-6 text-sm font-medium">
-                        <li className={`${step === 1 ? 'text-white font-bold' : 'text-blue-200'}`}>
-                            <span className="inline-block w-5 h-5 mr-2 rounded-full border-2 border-white text-xs text-center">
-                                1
-                            </span>
-                            Basic Info
-                        </li>
-                        <li className={`${step === 2 ? 'text-white font-bold' : 'text-blue-200'}`}>
-                            <span className="inline-block w-5 h-5 mr-2 rounded-full border-2 border-white text-xs text-center">
-                                2
-                            </span>
-                            Purchase
-                        </li>
-                        <li className={`${step === 3 ? 'text-white font-bold' : 'text-blue-200'}`}>
-                            <span className="inline-block w-5 h-5 mr-2 rounded-full border-2 border-white text-xs text-center">
-                                3
-                            </span>
-                            Rental Info
-                        </li>
-                        <li className={`${step === 4 ? 'text-white font-bold' : 'text-blue-200'}`}>
-                            <span className="inline-block w-5 h-5 mr-2 rounded-full border-2 border-white text-xs text-center">
-                                4
-                            </span>
-                            Expenses
-                        </li>
+                        {['Basic Info', 'Purchase', 'Rental Info', 'Expenses', 'Ownership'].map((label, index) => (
+                            <li key={label} className={`${step === index + 1 ? 'text-white font-bold' : 'text-blue-200'}`}>
+                                <span className="inline-block w-5 h-5 mr-2 rounded-full border-2 border-white text-xs text-center">
+                                    {index + 1}
+                                </span>
+                                {label}
+                            </li>
+                        ))}
                     </ul>
-
                     <div className="absolute bottom-6 left-6 right-6 h-2 bg-blue-300 rounded-full overflow-hidden">
                         <div
                             className="h-full bg-white transition-all duration-300"
-                            style={{ width: `${(step / 4) * 100}%` }}
+                            style={{ width: `${(step / 5) * 100}%` }}
                         />
                     </div>
                 </div>
 
-                {/* Right: Form Step Content */}
+                {/* Right Form Panel */}
                 <div className="w-full md:w-2/3 p-8 md:p-10">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6">Add Property</h2>
 
@@ -150,8 +145,8 @@ export default function PropertyForm() {
                         <Step3RentalInfo
                             data={formData}
                             updateFields={updateFields}
-                            onBack={() => setStep(2)}
                             onNext={() => setStep(4)}
+                            onBack={() => setStep(2)}
                         />
                     )}
 
@@ -160,14 +155,25 @@ export default function PropertyForm() {
                             data={formData}
                             updateFields={updateFields}
                             onBack={() => setStep(3)}
-                            onSubmit={async () => {
+                            onNext={() => setStep(5)}
+                        />
+
+                    )}
+
+                    {step === 5 && (
+                        <Step5OwnershipIncome
+                            data={formData}
+                            updateFields={updateFields}
+                            onBack={() => setStep(4)}
+                            onSubmit={async (finalData) => {
                                 try {
-                                    const res = await createProperty(formData)
-                                    console.log("Submitted to backend:", res)
+                                    console.log("🚀 SENDING TO BACKEND:", finalData)
+                                    const res = await createProperty(finalData)  // ✅ use finalData, not formData
+                                    console.log("✅ Submitted to backend:", res)
                                     setIsSubmitted(true)
                                 } catch (err) {
-                                    alert("Submission failed. Try again.")
-                                    console.error(err)
+                                    console.error("❌ Submission failed:", err)
+                                    alert("Submission failed: Please check all required fields.")
                                 }
                             }}
                         />
@@ -176,6 +182,4 @@ export default function PropertyForm() {
             </div>
         </div>
     )
-
 }
-

@@ -86,8 +86,8 @@ export default function Step1BasicInfo({ data, updateFields, onSuccess }: Props)
                     type="submit"
                     disabled={!isValid}
                     className={`px-6 py-2 rounded-md text-white font-semibold shadow-sm transition ${isValid
-                            ? 'bg-blue-600 hover:bg-blue-700'
-                            : 'bg-gray-400 cursor-not-allowed'
+                        ? 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-gray-400 cursor-not-allowed'
                         }`}
                 >
                     Next →

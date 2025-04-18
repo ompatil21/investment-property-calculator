@@ -3,13 +3,14 @@
 import { useForm } from 'react-hook-form'
 import { DollarSign, Percent, Calendar, Banknote } from 'lucide-react'
 
+
 type Props = {
     data: {
-        purchase_price: number
-        deposit: number
-        loan_amount: number
-        interest_rate: number
-        loan_term: number
+        purchase_price: number | undefined
+        deposit: number | undefined
+        loan_amount: number | undefined
+        interest_rate: number | undefined
+        loan_term: number | undefined
     }
     updateFields: (fields: Partial<Props['data']>) => void
     onNext: () => void
